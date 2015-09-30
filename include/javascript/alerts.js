@@ -57,5 +57,3 @@ Alerts.prototype.updateManager=function(){var url='index.php?module=Alerts&actio
 else{$('.alertsButton').removeClass('btn-danger').addClass('btn-success');}}).fail(function(){}).always(function(){});}
 Alerts.prototype.markAsRead=function(id){var url='index.php?module=Alerts&action=markAsRead&record='+id+'&to_pdf=1';$.ajax(url).done(function(data){Alerts.prototype.updateManager();}).fail(function(){}).always(function(){});}
 function AlertObj(){this.title='Alert';this.options={body:' ',url_redirect:null,target_module:null,type:'info'};}
-$(document).ready(function(){var updateMissed=function(){Alerts.prototype.updateManager();setTimeout(updateMissed,60000);}
-setTimeout(updateMissed,2000);});
