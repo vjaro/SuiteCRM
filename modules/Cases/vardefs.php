@@ -43,6 +43,12 @@ $dictionary['Case'] = array('table' => 'cases','audited'=>true, 'unified_search'
 		'comment' => 'Cases are issues or problems that a customer asks a support representative to resolve'
                                ,'fields' => array (
 
+        'suggestion_box' => array(
+            'name' => 'suggestion_box',
+            'vname' => 'LBL_SUGGESTION_BOX',
+            'type' => 'readonly',
+            'source' => 'non-db',
+        ),
 
    'account_name' =>
   array (
@@ -264,7 +270,18 @@ $dictionary['Case'] = array('table' => 'cases','audited'=>true, 'unified_search'
    ,'cases_created_by' =>
    array('lhs_module'=> 'Users', 'lhs_table'=> 'users', 'lhs_key' => 'id',
    'rhs_module'=> 'Cases', 'rhs_table'=> 'cases', 'rhs_key' => 'created_by',
-   'relationship_type'=>'one-to-many')
+   'relationship_type'=>'one-to-many'),
+
+	'cases_created_contact' =>
+	array (
+			'lhs_module' => 'Contacts',
+			'lhs_table' => 'contacts',
+			'lhs_key' => 'id',
+			'rhs_module' => 'Cases',
+			'rhs_table' => 'cases',
+			'rhs_key' => 'contact_created_by_id',
+			'relationship_type' => 'one-to-many',
+	),
 )
 //This enables optimistic locking for Saves From EditView
 	,'optimistic_locking'=>true,
