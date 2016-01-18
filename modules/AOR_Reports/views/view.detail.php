@@ -33,7 +33,7 @@ class AOR_ReportsViewDetail extends ViewDetail {
         if(!$this->bean->id){
             return array();
         }
-        $conditions = $this->bean->get_linked_beans('aor_conditions','AOR_Conditions');
+        $conditions = $this->bean->get_linked_beans('aor_conditions','AOR_Conditions', 'condition_order');
         $parameters = array();
         foreach($conditions as $condition){
             if(!$condition->parameter){
@@ -53,7 +53,12 @@ class AOR_ReportsViewDetail extends ViewDetail {
                 $condition_item['value_type'] = $param['type'];
                 $condition_item['value'] = $param['value'];
             }
-            $parameters[] = $condition_item;
+            if(isset($parameters[$condition_item['condition_order']])) {
+                $parameters[] = $condition_item;
+            }
+            else {
+                $parameters[$condition_item['condition_order']] = $condition_item;
+            }
         }
         return $parameters;
     }
@@ -67,9 +72,15 @@ class AOR_ReportsViewDetail extends ViewDetail {
 
         $this->bean->user_parameters = requestToUserParameters();
 
-        $reportHTML = $this->bean->build_group_report(0,true).'<br />';
-        $reportHTML .= $this->bean->build_report_chart(null, AOR_Report::CHART_TYPE_CHARTJS);
+
+        $reportHTML = $this->bean->build_group_report(0,true);
+
+        // use AOR_Report::CHART_TYPE_CHARTJS constant for old charts
+        $chartsHTML = $this->bean->build_report_chart(null, AOR_Report::CHART_TYPE_RGRAPH);
+
         $this->ss->assign('report_content',$reportHTML);
+        $this->ss->assign('charts_content',$chartsHTML);
+
         echo "<input type='hidden' name='report_module' id='report_module' value='{$this->bean->report_module}'>";
         if (!is_file('cache/jsLanguage/AOR_Conditions/' . $GLOBALS['current_language'] . '.js')) {
             require_once ('include/language/jsLanguage.php');
